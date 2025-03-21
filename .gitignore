@@ -1,2 +1,7 @@
 .godot/
 data/
+*.uid
+*.depren
+humanizer/
+addons/humanizer/
+addons/humanizer_assets/

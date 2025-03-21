@@ -1,0 +1,262 @@
+[gd_scene load_steps=7 format=3 uid="uid://b6apa4vss8dou"]
+
+[ext_resource type="Script" uid="uid://bdo4w6n64532u" path="res://addons/humanizer_menu/scene/new_character_menu.gd" id="1_viqxw"]
+[ext_resource type="Texture2D" uid="uid://b7mfvpe7nl2a8" path="res://addons/humanizer_menu/assets/thumbnails/hair/none.png" id="2_20lk3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f0duq"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_sm1kj"]
+sky_material = SubResource("ProceduralSkyMaterial_f0duq")
+
+[sub_resource type="Environment" id="Environment_yvgqs"]
+background_mode = 2
+sky = SubResource("Sky_sm1kj")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n4uak"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0)
+
+[node name="New_Character" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_viqxw")
+
+[node name="Split_Screen" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 515
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Split_Screen"]
+layout_mode = 2
+
+[node name="Menu_Options" type="TabContainer" parent="Split_Screen/ScrollContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+current_tab = 1
+clip_tabs = false
+
+[node name="Body" type="VBoxContainer" parent="Split_Screen/ScrollContainer/Menu_Options"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Label" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+layout_mode = 2
+text = "Gender"
+
+[node name="GenderOptions" type="OptionButton" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 1
+item_count = 2
+popup/item_0/text = "Male"
+popup/item_0/id = 0
+popup/item_1/text = "Female"
+popup/item_1/id = 1
+
+[node name="Label2" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+layout_mode = 2
+text = "Skin Tone"
+
+[node name="SkinColorPicker" type="ColorPickerButton" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skin Tone"
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="Macro_Sliders" type="VBoxContainer" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+layout_mode = 2
+text = " ---- Ethnicity ---- "
+
+[node name="Race_Sliders" type="VBoxContainer" parent="Split_Screen/ScrollContainer/Menu_Options/Body"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Face" type="VBoxContainer" parent="Split_Screen/ScrollContainer/Menu_Options"]
+unique_name_in_owner = true
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Label" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+layout_mode = 2
+text = "Eye Color"
+
+[node name="EyeColorPicker" type="ColorPickerButton" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Eye Color"
+color = Color(5.39064e-06, 0.767175, 0.93122, 1)
+edit_alpha = false
+
+[node name="Label2" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+layout_mode = 2
+text = "Hair Color"
+
+[node name="HairColorPicker" type="ColorPickerButton" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Hair Color"
+color = Color(0.416754, 4.09111e-07, 0, 1)
+edit_alpha = false
+
+[node name="Label3" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+layout_mode = 2
+text = "Hair Style"
+
+[node name="HairTypeSelect" type="OptionButton" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "None"
+popup/item_0/icon = ExtResource("2_20lk3")
+popup/item_0/id = 0
+
+[node name="Label4" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+layout_mode = 2
+text = "Eyebrows"
+
+[node name="EyebrowTypeSelect" type="OptionButton" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+layout_mode = 2
+text = "Eyelashes"
+
+[node name="EyelashTypeSelect" type="OptionButton" parent="Split_Screen/ScrollContainer/Menu_Options/Face"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Details" type="VBoxContainer" parent="Split_Screen/ScrollContainer/Menu_Options"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Equipment" type="VBoxContainer" parent="Split_Screen/ScrollContainer/Menu_Options"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="Right_Side" type="PanelContainer" parent="Split_Screen"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Viewport" type="SubViewportContainer" parent="Split_Screen/Right_Side"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="CharacterScene" type="SubViewport" parent="Split_Screen/Right_Side/Viewport"]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(625, 648)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Split_Screen/Right_Side/Viewport/CharacterScene"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16017, 1)
+projection = 1
+size = 2.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Split_Screen/Right_Side/Viewport/CharacterScene"]
+transform = Transform3D(0.989127, -0.127363, 0.0735333, -9.83845e-09, 0.5, 0.866026, -0.147067, -0.856609, 0.494563, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Split_Screen/Right_Side/Viewport/CharacterScene"]
+environment = SubResource("Environment_yvgqs")
+
+[node name="Platform" type="CSGBox3D" parent="Split_Screen/Right_Side/Viewport/CharacterScene"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0587964, 0)
+use_collision = true
+size = Vector3(1, 0.1, 1)
+material = SubResource("StandardMaterial3D_n4uak")
+
+[node name="Sliders" type="HBoxContainer" parent="Split_Screen/Right_Side"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Split_Screen/Right_Side/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 82
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 83
+theme_override_constants/margin_bottom = 52
+
+[node name="rotate_container" type="VBoxContainer" parent="Split_Screen/Right_Side/Sliders/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="Label" type="Label" parent="Split_Screen/Right_Side/Sliders/MarginContainer/rotate_container"]
+layout_mode = 2
+text = "rotate"
+
+[node name="rotate_slider" type="HSlider" parent="Split_Screen/Right_Side/Sliders/MarginContainer/rotate_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="Zoom_Container" type="VBoxContainer" parent="Split_Screen/Right_Side/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="zoom_label" type="Label" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "zoom"
+horizontal_alignment = 1
+
+[node name="zoom_slider" type="VSlider" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.01
+allow_greater = true
+
+[node name="Next" type="Button" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "  Next  "
+
+[node name="padding" type="Label" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+layout_mode = 2
+
+[connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Body/GenderOptions" to="." method="_on_gender_options_item_selected"]
+[connection signal="color_changed" from="Split_Screen/ScrollContainer/Menu_Options/Body/SkinColorPicker" to="." method="_on_skin_color_picker_color_changed"]
+[connection signal="color_changed" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyeColorPicker" to="." method="_on_eye_color_picker_color_changed"]
+[connection signal="color_changed" from="Split_Screen/ScrollContainer/Menu_Options/Face/HairColorPicker" to="." method="_on_hair_color_picker_color_changed"]
+[connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Face/HairTypeSelect" to="." method="_on_hair_type_select_item_selected"]
+[connection signal="pressed" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyebrowTypeSelect" to="." method="_on_eyebrow_type_select_pressed"]
+[connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyelashTypeSelect" to="." method="_on_eyelash_type_select_item_selected"]
+[connection signal="value_changed" from="Split_Screen/Right_Side/Sliders/MarginContainer/rotate_container/rotate_slider" to="." method="_on_rotate_slider_value_changed"]
+[connection signal="value_changed" from="Split_Screen/Right_Side/Sliders/Zoom_Container/zoom_slider" to="." method="_on_zoom_slider_value_changed"]
+[connection signal="pressed" from="Split_Screen/Right_Side/Sliders/Zoom_Container/Next" to="." method="_on_next_pressed"]
