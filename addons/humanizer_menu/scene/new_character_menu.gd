@@ -11,6 +11,47 @@ var zoom_mid_offset = 0
 var humanizer := Live_Humanizer.new()
 
 func _ready():
+	%SavePopup.hide()
+	%SaveFileDialog.hide()
+	%LoadFileDialog.hide()
+	#connect to save file close request
+	%SaveFileDialog.close_requested.connect(%SaveFileDialog.hide)
+	%SaveFileDialog.canceled.connect(%SaveFileDialog.hide)
+	%LoadFileDialog.close_requested.connect(%LoadFileDialog.hide)
+	%LoadFileDialog.canceled.connect(%LoadFileDialog.hide)
+	
+	init_character()
+	build_menu()
+
+	get_camera_min_max()
+	%Camera3D.position.y = 0
+	%Camera3D.position.x = 0
+	%Camera3D.position.z = 1
+	%Camera3D.v_offset = zoom_out_offset
+	%Camera3D.size = zoom_out_size
+	%zoom_slider.value = .4
+	#_on_zoom_slider_value_changed(%zoom_slider.value)
+
+func load_from_config(path:String):
+	%Platform.remove_child(humanizer.physics_body)
+	var new_config = load(path)
+	humanizer.load_config_async(new_config)
+	var char = humanizer.get_CharacterBody3D(false) ## can bake character here by setting argument to true
+	%Platform.add_child(char)
+	char.global_position = Vector3.ZERO
+	#HumanizerEditorUtils.set_node_owner(char,self)
+	#char.camera = %Camera3D
+	
+func load_from_scene(path:String):
+	%Platform.remove_child(humanizer.physics_body)
+	var char = load(path).instantiate()
+	var new_config = char.human_config
+	humanizer.load_config_async(new_config)
+	humanizer.physics_body = char
+	%Platform.add_child(char)
+	char.global_position = Vector3.ZERO
+		
+func init_character():
 	var config = HumanConfig.new()
 	config.targets['gender'] = 0.0
 	config.init_macros()
@@ -33,24 +74,12 @@ func _ready():
 	config.add_equipment(HumanizerEquipment.new("LeftEyebrow-002"))
 	config.add_equipment(HumanizerEquipment.new("RightEyelash"))
 	config.add_equipment(HumanizerEquipment.new("LeftEyelash"))
-	humanizer.load_config_async(config)
-	init_character()
-	build_menu()
-
-	get_camera_min_max()
-	%Camera3D.position.y = 0
-	%Camera3D.position.x = 0
-	%Camera3D.position.z = 1
-	%Camera3D.v_offset = zoom_out_offset
-	%Camera3D.size = zoom_out_size
-	%zoom_slider.value = .4
-	#_on_zoom_slider_value_changed(%zoom_slider.value)
-
-func init_character():
+	humanizer.load_config_async(config)	
+	#humanizer.hide_vertex = humanizer.HIDE_VERTEX_FLAGS.enabled
 	var char = humanizer.get_CharacterBody3D(false) ## can bake character here by setting argument to true
 	%Platform.add_child(char)
 	char.global_position = Vector3.ZERO
-	HumanizerUtils.set_node_owner(char,self)
+	HumanizerEditorUtils.set_node_owner(char,self)
 	char.camera = %Camera3D
 
 func update_character():
@@ -73,7 +102,6 @@ func delete_directory(path):
 	DirAccess.remove_absolute(path)
 	
 func build_menu():
-	
 	var shapekey_categories = HumanizerTargetService.get_shapekey_categories()
 	for category_name in shapekey_categories:
 		var category_keys = {}
@@ -207,12 +235,9 @@ func get_skin_color_ratios():
 	else:
 		var upper_age_ratio = (age-age_ranges[1])/(age_ranges[2]-age_ranges[1])
 		ratios.append(["middleage_caucasian_"+gender,1])
-		ratios.append(["old_caucasian_"+gender,upper_age_ratio])
-		
+		ratios.append(["old_caucasian_"+gender,upper_age_ratio])	
 	return ratios
 	
-
-
 func multiply_arrays(array1:Array,array2:Array):
 	if not array1.size() == array2.size():
 		printerr("cant multiply arrays of different lengths")
@@ -242,7 +267,7 @@ func _on_zoom_slider_value_changed(value):
 		%Camera3D.v_offset = ((zoom_out_offset-zoom_mid_offset) * ((invr_value-zoom_mid_ratio)/(1-zoom_mid_ratio))) + zoom_mid_offset
 	
 	
-func _on_next_pressed():
+func _on_play_pressed():
 	var save_material = StandardMaterial3D.new()
 	#save_material.albedo_color = skin_shader.get_shader_parameter("albedo")
 	var save_texture_image = Image.create(2**11,2**11,true,Image.FORMAT_RGB8)
@@ -323,13 +348,6 @@ func _on_hair_type_select_item_selected(index: int) -> void:
 	else:
 		humanizer.add_equipment(HumanizerEquipment.new(hair_id))
 
-func _on_eyebrow_type_select_pressed() -> void:
-	#print(eyebrow_menu_options[option_id])
-	var eyebrow_id = %EyebrowTypeSelect.get_selected_metadata()
-	humanizer.add_equipment(HumanizerEquipment.new(eyebrow_id))
-	eyebrow_id = eyebrow_id.replace("Right","Left")
-	humanizer.add_equipment(HumanizerEquipment.new(eyebrow_id))
-
 func _on_eyelash_type_select_item_selected(index: int) -> void:
 	var left_eyelash_name = "LeftEyelash"
 	var right_eyelash_name = "RightEyelash"
@@ -341,3 +359,53 @@ func _on_eyelash_type_select_item_selected(index: int) -> void:
 		right_eyelash_name = "RightEyelash-False"
 	humanizer.add_equipment(HumanizerEquipment.new(left_eyelash_name,material_name))
 	humanizer.add_equipment(HumanizerEquipment.new(right_eyelash_name,material_name))
+
+
+func _on_eyebrow_type_select_item_selected(index: int) -> void:
+	#print(eyebrow_menu_options[option_id])
+	var eyebrow_id = %EyebrowTypeSelect.get_selected_metadata()
+	humanizer.add_equipment(HumanizerEquipment.new(eyebrow_id))
+	eyebrow_id = eyebrow_id.replace("Right","Left")
+	humanizer.add_equipment(HumanizerEquipment.new(eyebrow_id))
+
+
+func _on_save_pressed() -> void:
+	%SavePopup.show()
+
+func _on_save_popup_close_requested() -> void:
+	%SavePopup.hide()
+
+func _on_save_file_dialog_confirmed() -> void:
+	%SaveFileDialog.hide()
+	%DestinationPath.text = %SaveFileDialog.current_path
+
+func _on_select_save_file_button_pressed() -> void:
+	%SaveFileDialog.show()
+
+func _on_save_popup_save_button_pressed() -> void:
+	var save_type = get_option_text(%SaveTypeOptions)
+	var destination_path = %DestinationPath.text
+	if save_type == "HumanConfig":
+		ResourceSaver.save(humanizer.human_config,destination_path)
+	elif save_type == "Character3D":
+		OSPath.save_scene_to_file(humanizer.physics_body,destination_path)
+	elif save_type == "Baked Character3D":
+		OSPath.save_scene_to_file(humanizer.get_CharacterBody3D(true),destination_path)
+
+func _on_save_type_options_item_selected(index: int) -> void:
+	var save_type = get_option_text(%SaveTypeOptions)
+	var destination_path = %DestinationPath.text
+	if save_type == "HumanConfig":
+		%SaveFileDialog.filters[0] = "*.res"
+	else:
+		%SaveFileDialog.filters[0] = "*.scn"
+		
+func _on_load_pressed() -> void:
+	%LoadFileDialog.show()
+
+func _on_load_file_dialog_file_selected(path:String) -> void:
+	#var path:String = %LoadFileDialog.current_path
+	if path.get_extension() == "res":
+		load_from_config(path)
+	else:
+		load_from_scene(path)

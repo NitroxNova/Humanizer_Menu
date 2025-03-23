@@ -195,8 +195,35 @@ use_collision = true
 size = Vector3(1, 0.1, 1)
 material = SubResource("StandardMaterial3D_n4uak")
 
-[node name="Sliders" type="HBoxContainer" parent="Split_Screen/Right_Side"]
+[node name="Sliders" type="VBoxContainer" parent="Split_Screen/Right_Side"]
 layout_mode = 2
+
+[node name="Zoom_Container" type="VBoxContainer" parent="Split_Screen/Right_Side/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="zoom_label" type="Label" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "zoom"
+horizontal_alignment = 1
+
+[node name="zoom_slider" type="VSlider" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.01
+allow_greater = true
+
+[node name="padding" type="Label" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+layout_mode = 2
+text = "                        "
 
 [node name="MarginContainer" type="MarginContainer" parent="Split_Screen/Right_Side/Sliders"]
 layout_mode = 2
@@ -220,43 +247,94 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 
-[node name="Zoom_Container" type="VBoxContainer" parent="Split_Screen/Right_Side/Sliders"]
+[node name="Buttons" type="HBoxContainer" parent="Split_Screen/Right_Side/Sliders"]
 layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/separation = 15
-alignment = 1
+alignment = 2
 
-[node name="zoom_label" type="Label" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "zoom"
-horizontal_alignment = 1
-
-[node name="zoom_slider" type="VSlider" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-max_value = 1.0
-step = 0.01
-allow_greater = true
-
-[node name="Next" type="Button" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+[node name="Load" type="Button" parent="Split_Screen/Right_Side/Sliders/Buttons"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "  Next  "
+text = "  Load  "
 
-[node name="padding" type="Label" parent="Split_Screen/Right_Side/Sliders/Zoom_Container"]
+[node name="Save" type="Button" parent="Split_Screen/Right_Side/Sliders/Buttons"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "  Save  "
+
+[node name="Play" type="Button" parent="Split_Screen/Right_Side/Sliders/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "  Play  "
+
+[node name="SavePopup" type="Window" parent="."]
+unique_name_in_owner = true
+initial_position = 2
+size = Vector2i(200, 200)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SavePopup"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="SavePopup/VBoxContainer"]
+layout_mode = 2
+text = "Save Type:"
+
+[node name="SaveTypeOptions" type="OptionButton" parent="SavePopup/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "HumanConfig"
+popup/item_0/id = 0
+popup/item_1/text = "Character3D"
+popup/item_1/id = 1
+popup/item_2/text = "Baked Character3D"
+popup/item_2/id = 2
+
+[node name="Label2" type="Label" parent="SavePopup/VBoxContainer"]
+layout_mode = 2
+text = "Destination:"
+
+[node name="SelectSaveFileButton" type="Button" parent="SavePopup/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Select File"
+
+[node name="DestinationPath" type="LineEdit" parent="SavePopup/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "res://output/"
+
+[node name="SavePopupSaveButton" type="Button" parent="SavePopup/VBoxContainer"]
+layout_mode = 2
+text = "Save"
+
+[node name="SaveFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+filters = PackedStringArray("*.res")
+
+[node name="LoadFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray(".res", ".scn")
 
 [connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Body/GenderOptions" to="." method="_on_gender_options_item_selected"]
 [connection signal="color_changed" from="Split_Screen/ScrollContainer/Menu_Options/Body/SkinColorPicker" to="." method="_on_skin_color_picker_color_changed"]
 [connection signal="color_changed" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyeColorPicker" to="." method="_on_eye_color_picker_color_changed"]
 [connection signal="color_changed" from="Split_Screen/ScrollContainer/Menu_Options/Face/HairColorPicker" to="." method="_on_hair_color_picker_color_changed"]
 [connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Face/HairTypeSelect" to="." method="_on_hair_type_select_item_selected"]
-[connection signal="pressed" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyebrowTypeSelect" to="." method="_on_eyebrow_type_select_pressed"]
+[connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyebrowTypeSelect" to="." method="_on_eyebrow_type_select_item_selected"]
 [connection signal="item_selected" from="Split_Screen/ScrollContainer/Menu_Options/Face/EyelashTypeSelect" to="." method="_on_eyelash_type_select_item_selected"]
-[connection signal="value_changed" from="Split_Screen/Right_Side/Sliders/MarginContainer/rotate_container/rotate_slider" to="." method="_on_rotate_slider_value_changed"]
 [connection signal="value_changed" from="Split_Screen/Right_Side/Sliders/Zoom_Container/zoom_slider" to="." method="_on_zoom_slider_value_changed"]
-[connection signal="pressed" from="Split_Screen/Right_Side/Sliders/Zoom_Container/Next" to="." method="_on_next_pressed"]
+[connection signal="value_changed" from="Split_Screen/Right_Side/Sliders/MarginContainer/rotate_container/rotate_slider" to="." method="_on_rotate_slider_value_changed"]
+[connection signal="pressed" from="Split_Screen/Right_Side/Sliders/Buttons/Load" to="." method="_on_load_pressed"]
+[connection signal="pressed" from="Split_Screen/Right_Side/Sliders/Buttons/Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Split_Screen/Right_Side/Sliders/Buttons/Play" to="." method="_on_play_pressed"]
+[connection signal="close_requested" from="SavePopup" to="." method="_on_save_popup_close_requested"]
+[connection signal="item_selected" from="SavePopup/VBoxContainer/SaveTypeOptions" to="." method="_on_save_type_options_item_selected"]
+[connection signal="pressed" from="SavePopup/VBoxContainer/SelectSaveFileButton" to="." method="_on_select_save_file_button_pressed"]
+[connection signal="pressed" from="SavePopup/VBoxContainer/SavePopupSaveButton" to="." method="_on_save_popup_save_button_pressed"]
+[connection signal="confirmed" from="SaveFileDialog" to="." method="_on_save_file_dialog_confirmed"]
+[connection signal="file_selected" from="LoadFileDialog" to="." method="_on_load_file_dialog_file_selected"]
